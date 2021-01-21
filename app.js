@@ -140,6 +140,40 @@ const tasks = [
     li.appendChild(deleteBtn);
     li.appendChild(article);
 
+    li.setAttribute("data-task-id", _id);
     return li;
+  }
+
+  //Удаление задачи
+
+  //17. Вешаем событие на родителя, т.е. на ul
+  listContainer.addEventListener("click", onDeleteHandler);
+
+  //18. Создаем обработчик события onDeleteHandler
+  function onDeleteHandler(event) {
+    if (event.target.classList.contains("delete-btn")) {
+      const parent = event.target.closest("[data-task-id]"); //ищем родителя(li) с атрибутом
+      const id = parent.dataset.taskId;
+      const confirmed = deleteTask(id);
+      deleteTaskFromHtml(confirmed, parent);
+    }
+  }
+
+  //19. Удаление задачи
+  function deleteTask(id) {
+    const isConfirm = confirm("Точно вы хотите удалить задачу?");
+    if (!isConfirm) {
+      return isConfirm;
+    }
+    delete objOfTasks[id];
+    return isConfirm;
+  }
+
+  //20. Удаление задачи из разметки
+  function deleteTaskFromHtml(confirmed, el) {
+    if (!confirmed) {
+      return;
+    }
+    el.remove();
   }
 })(tasks);

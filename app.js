@@ -40,6 +40,50 @@ const tasks = [
     return acc;
   }, {});
 
+  //Добавление новой задачи через форму
+  //9. Ищем форму
+  const form = document.forms.addTask;
+
+  //10. Ищем input
+  const inputTitle = form.elements.title;
+  const inputBody = form.elements.body;
+
+  //11. Вешаем событие на форму
+  form.addEventListener("submit", onFormSubmitHandler);
+
+  //12. Создаем ф-ю обработчик события
+  function onFormSubmitHandler(event) {
+    event.preventDefault();
+    //Вытаскиваем, что пришло в поля
+    const titleValue = inputTitle.value;
+    const bodyValue = inputBody.value;
+    //Проверяем на пустую строку, перед тем как сделать новую задачу
+    if (!titleValue || !bodyValue) {
+      console.error("Введите значение");
+      return;
+    }
+    const task = createNewTask(titleValue, bodyValue);
+    //14. Формируем DOM-element (li) через ф-ю
+    const listItem = listItemTemplate(task);
+    //15. Добавляем новую задачу в listContainer
+    listContainer.insertAdjacentElement("afterbegin", listItem);
+    //16. Очищаем форму
+    form.reset();
+  }
+
+  //13. Создаем объект задачи и добавляем в список задач
+  function createNewTask(title, body) {
+    const newTask = {
+      title,
+      body,
+      completed: false,
+      _id: `task-${Math.random()}`,
+    };
+    objOfTasks[newTask._id] = newTask;
+    //Возвращаем копию задачи
+    return { ...newTask };
+  }
+
   //7. Ищем ul, куда будем добавлять фрагмент с li
   const listContainer = document.querySelector(
     ".tasks-list-section .list-group"

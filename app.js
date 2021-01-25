@@ -111,7 +111,7 @@ const tasks = [
   const themeSelect = document.querySelector("#themeSelect");
 
   //Переключение темы. Тема по дефолту
-  let lastSelectedTheme = "default";
+  let lastSelectedTheme = localStorage.getItem("app_theme") || "default";
 
   //Переключение темы. Вешаем обработчик события
   themeSelect.addEventListener("change", onThemeSelectHandler);
@@ -128,6 +128,7 @@ const tasks = [
     }
     setTheme(selectedTheme);
     lastSelectedTheme = selectedTheme;
+    localStorage.setItem("app_theme", selectedTheme);
   }
 
   //Переключение темы. Ф-я, устанавливающая тему
@@ -186,6 +187,9 @@ const tasks = [
   const listContainer = document.querySelector(
     ".tasks-list-section .list-group"
   );
+
+  //Переключение темы. Применение темы из localStorage
+  setTheme(lastSelectedTheme);
 
   //2. Вывести все задачи на странице
   renderAllTasks(objOfTasks);
